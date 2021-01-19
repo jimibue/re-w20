@@ -20,7 +20,7 @@ cities = [
   "Murray",
 ]
 
-10.times do
+100.times do
   a = Agent.create(
     first_name: Faker::Name.first_name,
     last_name: Faker::Name.last_name,
@@ -28,7 +28,7 @@ cities = [
     phone: Faker::PhoneNumber.cell_phone,
   )
 
-  5.times do
+  50.times do
     num_cities = rand(1..cities.length - 1)
     Buyer.create(
       first_name: Faker::Name.first_name,
@@ -41,7 +41,7 @@ cities = [
     )
   end
 
-  5.times do
+  50.times do
     sold = Faker::Boolean.boolean(0.3) #fix this
     price = rand(99000..1500000)
     percent_change = (-3..3).to_a.sample.to_f / 100

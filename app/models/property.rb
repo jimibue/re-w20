@@ -15,6 +15,7 @@ class Property < ApplicationRecord
       .order("a.id")
   end
 
+  # innefficent
   def self.available_no_sql
     Agent.all.map do |agent|
       agent.properties.map do |p|
