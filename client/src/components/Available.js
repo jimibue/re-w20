@@ -1,0 +1,194 @@
+import Axios from "axios";
+import { useState, useEffect } from "react";
+import { Image, List, Table } from "semantic-ui-react";
+
+const data = [
+  {
+    id: 1,
+    agent_id: 1,
+    first_name: "John",
+    last_name: "Doe",
+    email: "test@tes.com",
+    price: 12312,
+    beds: 2,
+    baths: 3,
+    city: "scl",
+    street: "sdf",
+    zip: 123,
+    sq_ft: 23452,
+  },
+  {
+    id: 2,
+    agent_id: 1,
+    first_name: "John",
+    last_name: "Doe",
+    email: "test@tes.com",
+    price: 12312,
+    beds: 2,
+    baths: 3,
+    city: "scl",
+    street: "sdf",
+    zip: 123,
+    sq_ft: 23452,
+  },
+  {
+    id: 3,
+    agent_id: 2,
+    first_name: "Jane",
+    last_name: "Doe",
+    email: "test@tes.com",
+    price: 12312,
+    beds: 2,
+    baths: 3,
+    city: "scl",
+    street: "sdf",
+    zip: 123,
+    sq_ft: 23452,
+  },
+  {
+    id: 4,
+    agent_id: 2,
+    first_name: "Jane",
+    last_name: "Doe",
+    email: "test@tes.com",
+    price: 12312,
+    beds: 2,
+    baths: 3,
+    city: "scl",
+    street: "sdf",
+    zip: 123,
+    sq_ft: 23452,
+  },
+];
+
+// THIS IS WHAT WE WANT
+// normalizedData = [
+//   {
+//     full_name: "John Doe",
+//     email:'test.com',
+//     properties: [
+//       { price: 12312, beds: 2, baths: 3, city: "scl", street: "sdf" },
+//       { price: 12312, beds: 2, baths: 3, city: "scl", street: "sdf" },
+//     ],
+//   },
+//   {
+//     full_name: "Jane Doe",
+//     properties: [
+//       { price: 12312, beds: 2, baths: 3, city: "scl", street: "sdf" },
+//       { price: 12312, beds: 2, baths: 3, city: "scl", street: "sdf" },
+//     ],
+//   },
+// ];
+
+// normalizeData = (data) => {
+//   let agents = [];
+//   let ids = [...new Set(data.map( d => d.agent_id ))];
+//   ids.map( id => {
+//     let properties = data.filter( d => d.agent_id === id );
+//     let { agent_id, first_name, last_name, email, phone } = properties[0];
+//     let agentProperties = properties.map( p => {
+//       let { price, beds, baths, sq_ft, city, street, zip, id, } = p;
+//       return { price, beds, baths, sq_ft, city, street, zip, id, };
+//     });
+
+//     let detail = { agent_id, first_name, last_name, email, phone, properties: agentProperties, };
+
+//     agents.push(detail);
+//   });
+//   return agents;
+// }
+
+const normalizeData = () => {
+  // [].reduce((accum,d)=>{}, {})
+  let agents = data.reduce(
+    (accum, p) => {
+      let property = {
+        price: p.price,
+        beds: p.beds,
+        baths: p.baths,
+        city: p.city,
+        street: p.street,
+        sq_ft: p.sq_ft,
+        zip: p.zip,
+      };
+
+      if (p.agent_id in accum) {
+        accum[p.agent_id].agentProperties.push(property);
+      } else {
+        accum[p.agent_id] = {
+          fullName: `${p.first_name} ${p.last_name}`,
+          email: p.email,
+          agentProperties: [property],
+        };
+      }
+      return accum;
+    },
+    {} // starting value of accum
+  );
+  console.log(agents);
+  // just need the value
+  return Object.values(agents);
+};
+export default () => {
+  const [properties, setProperties] = useState([]);
+  useEffect(() => {
+    getProperties();
+  }, []);
+  const getProperties = async () => {
+    try {
+      // TODO hook up with actual DB when done
+      let res = await Axios.get("/api/propertiesX");
+
+      setProperties(res.data);
+    } catch (err) {
+      let normalized = normalizeData(data);
+      setProperties(normalized);
+    }
+  };
+  return (
+    <>
+      {/* Price	Beds	Baths	Sq. Ft.	Street	City	ZIP */}
+      <h1>Available Page</h1>
+      {properties.map((p) => (
+        <List divided verticalAlign="middle">
+          <List.Item>
+            <Image
+              avatar
+              src="https://react.semantic-ui.com/images/avatar/small/tom.jpg"
+            />
+            <List.Content>
+              <List.Header as="a">{p.fullName}</List.Header>
+            </List.Content>
+          </List.Item>
+          <Table striped>
+            <Table.Header>
+              <Table.Row>
+                <Table.HeaderCell>Price</Table.HeaderCell>
+                <Table.HeaderCell>Beds</Table.HeaderCell>
+                <Table.HeaderCell>Baths</Table.HeaderCell>
+                {/* <Table.HeaderCell>Square Feet</Table.HeaderCell> */}
+                <Table.HeaderCell>Street</Table.HeaderCell>
+                <Table.HeaderCell>City</Table.HeaderCell>
+                <Table.HeaderCell>Zip</Table.HeaderCell>
+              </Table.Row>
+            </Table.Header>
+
+            <Table.Body>
+              {p.agentProperties.map((ap) => (
+                <Table.Row>
+                  <Table.Cell>{ap.price}</Table.Cell>
+                  <Table.Cell>{ap.beds}</Table.Cell>
+                  <Table.Cell>{ap.baths}</Table.Cell>
+                  {/* <Table.Cell>{ap.sq_ft}</Table.Cell> */}
+                  <Table.Cell>{ap.street}</Table.Cell>
+                  <Table.Cell>{ap.city}</Table.Cell>
+                  <Table.Cell>{ap.zip}</Table.Cell>
+                </Table.Row>
+              ))}
+            </Table.Body>
+          </Table>
+        </List>
+      ))}
+    </>
+  );
+};
