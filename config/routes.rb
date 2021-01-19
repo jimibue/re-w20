@@ -6,5 +6,6 @@ Rails.application.routes.draw do
     resources :things
     resources :users
     get "properties", to: "properties#index"
+    get "properties1", to: "properties#index1"
   end
 end
