@@ -2,84 +2,6 @@ import Axios from "axios";
 import { useState, useEffect } from "react";
 import { Image, List, Table } from "semantic-ui-react";
 
-const data = [
-  {
-    id: 1,
-    agent_id: 1,
-    first_name: "John",
-    last_name: "Doe",
-    email: "test@tes.com",
-    price: 12312,
-    beds: 2,
-    baths: 3,
-    city: "scl",
-    street: "sdf",
-    zip: 123,
-    sq_ft: 23452,
-  },
-  {
-    id: 2,
-    agent_id: 1,
-    first_name: "John",
-    last_name: "Doe",
-    email: "test@tes.com",
-    price: 12312,
-    beds: 2,
-    baths: 3,
-    city: "scl",
-    street: "sdf",
-    zip: 123,
-    sq_ft: 23452,
-  },
-  {
-    id: 3,
-    agent_id: 2,
-    first_name: "Jane",
-    last_name: "Doe",
-    email: "test@tes.com",
-    price: 12312,
-    beds: 2,
-    baths: 3,
-    city: "scl",
-    street: "sdf",
-    zip: 123,
-    sq_ft: 23452,
-  },
-  {
-    id: 4,
-    agent_id: 2,
-    first_name: "Jane",
-    last_name: "Doe",
-    email: "test@tes.com",
-    price: 12312,
-    beds: 2,
-    baths: 3,
-    city: "scl",
-    street: "sdf",
-    zip: 123,
-    sq_ft: 23452,
-  },
-];
-
-// THIS IS WHAT WE WANT
-// normalizedData = [
-//   {
-//     full_name: "John Doe",
-//     email:'test.com',
-//     properties: [
-//       { price: 12312, beds: 2, baths: 3, city: "scl", street: "sdf" },
-//       { price: 12312, beds: 2, baths: 3, city: "scl", street: "sdf" },
-//     ],
-//   },
-//   {
-//     full_name: "Jane Doe",
-//     properties: [
-//       { price: 12312, beds: 2, baths: 3, city: "scl", street: "sdf" },
-//       { price: 12312, beds: 2, baths: 3, city: "scl", street: "sdf" },
-//     ],
-//   },
-// ];
-
 // normalizeData = (data) => {
 //   let agents = [];
 //   let ids = [...new Set(data.map( d => d.agent_id ))];
@@ -98,7 +20,7 @@ const data = [
 //   return agents;
 // }
 
-const normalizeData = () => {
+const normalizeData = (data) => {
   // [].reduce((accum,d)=>{}, {})
   let agents = data.reduce(
     (accum, p) => {
@@ -137,12 +59,12 @@ export default () => {
   const getProperties = async () => {
     try {
       // TODO hook up with actual DB when done
-      let res = await Axios.get("/api/propertiesX");
-
-      setProperties(res.data);
-    } catch (err) {
-      let normalized = normalizeData(data);
+      let res = await Axios.get("/api/properties");
+      let normalized = normalizeData(res.data);
       setProperties(normalized);
+    } catch (err) {
+      console.log(err);
+      alert("error occured");
     }
   };
   return (
