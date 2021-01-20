@@ -14,6 +14,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import User from "./components/User";
 // import Available from "./components/Available";
 import Available from "./components/AvailableOld";
+import AvailableCustom from "./components/AvailableCustom";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
             <Route exact path="/login" component={Login} />
             <Route exact path="/register" component={Register} />
             <Route exact path="/available" component={Available} />
+            <Route exact path="/availableCustom" component={AvailableCustom} />
             <ProtectedRoute exact path="/users" component={Users} />
             <ProtectedRoute exact path="/things" component={Things} />
             <ProtectedRoute exact path="/user" component={User} />

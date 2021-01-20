@@ -10,6 +10,14 @@ class Api::PropertiesController < ApplicationController
     render json: Property.available_no_sql
   end
 
+  def city_list
+    render json: Address.distinct.pluck(:city)
+  end
+
+  def city
+    render json: Property.by_city(params[:city])
+  end
+
   private
 
   def set_page

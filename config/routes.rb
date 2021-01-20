@@ -7,5 +7,7 @@ Rails.application.routes.draw do
     resources :users
     get "properties", to: "properties#index"
     get "properties1", to: "properties#index1"
+    get "city_list", to: "properties#city_list"
+    get "cities/:city", to: "properties#city"
   end
 end

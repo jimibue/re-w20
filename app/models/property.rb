@@ -23,4 +23,14 @@ class Property < ApplicationRecord
       end
     end
   end
+
+  #   Select beds, baths, sq_ft, price, sold, city, zip
+  # from properties
+  # inner join addresses a ON a.property_id = properties.id
+  # where lower(a.city) = 'murray' and sold <> true
+  def self.by_city(city)
+    select("properties.id, beds, baths, sq_ft, price, sold, city, zip")
+      .joins("inner join addresses a ON a.property_id = properties.id")
+      .where("lower(a.city) = ? and sold <> true", city)
+  end
 end
