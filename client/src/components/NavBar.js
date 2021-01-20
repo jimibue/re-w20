@@ -46,6 +46,9 @@ export default () => {
       <Link to="/availableCustom">
         <Menu.Item name="Available Custom" />
       </Link>
+      <Link to="/cities">
+        <Menu.Item name="Cities" />
+      </Link>
       <Link to="/users">
         <Menu.Item name="All Users" />
       </Link>
