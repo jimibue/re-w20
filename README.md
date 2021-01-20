@@ -21,4 +21,4 @@
 
     HELLO HERE UNRELATED TO OTHER CHANGES
 
-    zxcv
+yarn add react-virtualized react-window react-virtualized-auto-sizer react-window-infinite-loader
