@@ -1,75 +1,6 @@
-// 1st call
-// I am getting back array of agents with extra frequency field on it
-// of  properties
-
 import Axios from "axios";
 import { useEffect, useState } from "react";
 import { Form } from "semantic-ui-react";
-
-let agentsData = [
-  {
-    email: "gene@wolf.org",
-    first_name: "Daryl1",
-    frequency: 43,
-    id: 36,
-    last_name: "Emmerich",
-    sold: false,
-  },
-  {
-    email: "gene1@wolf.org",
-    first_name: "Daryl2",
-    frequency: 73,
-    id: 37,
-    last_name: "Emmerich",
-    sold: false,
-  },
-  {
-    email: "gene1@wolf.org",
-    first_name: "Daryl3",
-    frequency: 23,
-    id: 38,
-    last_name: "Emmerich",
-    sold: false,
-  },
-];
-
-// 2nd Call (after I select an agent), I am going to get
-// the array of agents buyers whic
-const buyerData = [
-  {
-    cities: ["Sandy", "SLC"],
-    email: "eloisa@millschamplin.name",
-    first_name: "Trey3",
-    id: 1750,
-    last_name: "Ebert",
-    phone: "352-8533-3160",
-  },
-  {
-    cities: ["Draper", "SLC"],
-    email: "eloisa@millschamplin.name",
-    first_name: "Trey2",
-    id: 1751,
-    last_name: "Ebert",
-    phone: "352-8543-3160",
-  },
-  {
-    cities: ["Sandy", "SLC"],
-    email: "eloisa@millschamplin.name",
-    first_name: "Trey1",
-    id: 1753,
-    last_name: "Ebert",
-    phone: "352-8553-3160",
-  },
-];
-
-const propertyData = [
-  { id: 1, price: 123456, sq_ft: 1234, city: "Murray" },
-  { id: 2, price: 23456, sq_ft: 124, city: "slc" },
-  { id: 3, price: 12456, sq_ft: 234, city: "Murray" },
-];
-
-// 3rd call
-// give back Array of properties that are under buyers max_price and in the desired cities
 
 export default () => {
   const [agents, setAgents] = useState([]);
@@ -80,30 +11,27 @@ export default () => {
   }, []);
 
   const getAgents = async () => {
-    // TODO: HOOKUP TO ACTUAL WHEN FINISHED
     try {
-      let res = await Axios.get("/api/Xfind_homesX");
+      let res = await Axios.get("/api/agents");
       setAgents(res.data);
     } catch (err) {
-      setAgents(agentsData);
+      alert("err occured");
     }
   };
   const getBuyersProperties = async (id) => {
-    console.log(id);
     try {
-      let res = await Axios.get("/api/Xbuyers_propertiesX");
+      let res = await Axios.get(`/api/buyers/${id}`);
       setBuyersProperties(res.data);
     } catch (err) {
-      setBuyersProperties(propertyData);
+      alert("err occured");
     }
   };
   const getBuyers = async (id) => {
-    console.log(id);
     try {
-      let res = await Axios.get(`/api/agent_buyers/${id}`);
+      let res = await Axios.get(`/api/agents/${id}`);
       setBuyers(res.data);
     } catch (err) {
-      setBuyers(buyerData);
+      alert("err occured");
     }
   };
   const renderBuyers = () => {
