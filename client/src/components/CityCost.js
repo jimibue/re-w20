@@ -7,6 +7,8 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+import axios from "axios";
+import { useState, useEffect } from "react";
 const data = [
   {
     name: "SLC",
@@ -23,10 +25,41 @@ const data = [
   },
 ];
 export default () => {
+  const [chartData, setChartData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    getPrices();
+  }, []);
+
+  const normalizeData = (data) => {
+    // your code here
+    return data.map((d) => {
+      const averagePrice = Math.round(
+        d.prices.split(",").reduce((sum, num) => sum + parseInt(num), 0) /
+          d.price
+      );
+      return { name: d.city, averagePrice };
+    });
+  };
+
+  const getPrices = async () => {
+    try {
+      let res = await axios.get("/api/properties/city_cost");
+      console.log(res);
+      const normalizedData = normalizeData(res.data);
+      setChartData(normalizedData);
+      setLoading(false);
+    } catch (err) {
+      alert("err occured");
+      setLoading(false);
+    }
+  };
+  if (loading) return <p>loading</p>;
+
   return (
     <div>
-      <h1>form</h1>
-      <BarChart width={730} height={250} data={data}>
+      <h1>Cost by City</h1>
+      <BarChart width={730} height={250} data={chartData}>
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis dataKey="name" />
         <YAxis />
