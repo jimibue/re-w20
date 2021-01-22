@@ -52,6 +52,9 @@ export default () => {
       <Link to="/findHomes">
         <Menu.Item name="Find Homes" />
       </Link>
+      <Link to="/cityCost">
+        <Menu.Item name="Cost by City" />
+      </Link>
       <Link to="/users">
         <Menu.Item name="All Users" />
       </Link>
