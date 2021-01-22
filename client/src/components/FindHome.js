@@ -62,12 +62,19 @@ const buyerData = [
   },
 ];
 
+const propertyData = [
+  { id: 1, price: 123456, sq_ft: 1234, city: "Murray" },
+  { id: 2, price: 23456, sq_ft: 124, city: "slc" },
+  { id: 3, price: 12456, sq_ft: 234, city: "Murray" },
+];
+
 // 3rd call
 // give back Array of properties that are under buyers max_price and in the desired cities
 
 export default () => {
   const [agents, setAgents] = useState([]);
   const [buyers, setBuyers] = useState([]);
+  const [buyersProperties, setBuyersProperties] = useState([]);
   useEffect(() => {
     getAgents();
   }, []);
@@ -81,8 +88,14 @@ export default () => {
       setAgents(agentsData);
     }
   };
-  const getBuyersProperties = (id) => {
+  const getBuyersProperties = async (id) => {
     console.log(id);
+    try {
+      let res = await Axios.get("/api/Xbuyers_propertiesX");
+      setBuyersProperties(res.data);
+    } catch (err) {
+      setBuyersProperties(propertyData);
+    }
   };
   const getBuyers = async (id) => {
     console.log(id);
@@ -112,6 +125,20 @@ export default () => {
       />
     );
   };
+  const renderPropertyData = () => {
+    if (buyersProperties.length == 0) return null;
+    return buyersProperties.map((bp) => {
+      return (
+        <div key={`bp-${bp.id}`}>
+          <p style={{ marginBottom: 0 }}>price: {bp.price}</p>
+          <p style={{ marginTop: 0 }}>
+            city: {bp.city}, sq feet: {bp.sq_ft}
+          </p>
+          <hr />
+        </div>
+      );
+    });
+  };
   return (
     <>
       <h1>Find Home</h1>
@@ -128,6 +155,7 @@ export default () => {
         })}
       />
       {renderBuyers()}
+      {renderPropertyData()}
     </>
   );
 };
