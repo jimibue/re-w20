@@ -9,5 +9,8 @@ Rails.application.routes.draw do
     get "properties1", to: "properties#index1"
     get "city_list", to: "properties#city_list"
     get "cities/:city", to: "properties#city"
+    get "agents", to: "agents#index"
+    get "agents/:id_yo", to: "agents#show"
+    get "buyers/:id", to: "buyers#show"
   end
 end
